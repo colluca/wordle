@@ -14899,7 +14899,7 @@ def parse_args():
     n_attempts = int(len(attempts) // 2)
     for i in range(n_attempts):
         attempt, result = attempts[i*2], attempts[i*2+1]
-        assert set(result).issubset({'b', 'g', 'y'}), \
+        assert set(result).issubset({'b', 'g', 'y', '_'}), \
             'Result string can only contain b (black), g (green) and y (yellow) letters'
         assert len(attempt) == 5, 'Attempt must be a 5-letter word'
         assert len(result) == 5, 'Result must be a 5-letter word'
@@ -14965,8 +14965,8 @@ def get_known_occurrences(attempts):
     return known_occurrences
 
 
-def filter_black_letters(attempt, result):
-    return ''.join([attempt[j] for j in range(5) if result[j] != 'b'])
+def filter_black_and_unknown_letters(attempt, result):
+    return ''.join([attempt[j] for j in range(5) if result[j] not in ['b', '_']])
 
 
 def get_minimum_occurrences(attempts):
@@ -14978,7 +14978,7 @@ def get_minimum_occurrences(attempts):
     n_attempts = int(len(attempts) // 2)
     for i in range(n_attempts):
         attempt, result = attempts[i*2], attempts[i*2+1]
-        attempt = filter_black_letters(attempt, result)
+        attempt = filter_black_and_unknown_letters(attempt, result)
         for letter in set(attempt):
             count = attempt.count(letter)
             if letter not in minimum_occurrences or count > minimum_occurrences[letter]:

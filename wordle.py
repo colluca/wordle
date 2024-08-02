@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import copy
+import wordfreq
 
 allowed = [
     "aahed",
@@ -15020,7 +15021,9 @@ def main():
     # print(minimum_occurrences)
 
     matches = filter_words(allowed_letters, minimum_occurrences)
-    if len(matches) > 25:
+    matches = sorted(matches, key=lambda word: wordfreq.word_frequency(word, 'en'), reverse=True)
+
+    if len(matches) > 50:
         print(f'{len(matches)} matches')
     else:
         print(matches)

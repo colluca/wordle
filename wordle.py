@@ -14884,6 +14884,7 @@ all_letters = [
 	"z"
 ]
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -14893,9 +14894,14 @@ def parse_args():
         help='All attempts encoded as e.g. salet byybb ...'
     )
     args = parser.parse_args()
-    attempts = args.attempts
+    return args
 
-    # Validate args
+
+def uniformize_and_validate_attempts(attempts):
+    # Convert string to list
+    if isinstance(attempts, str):
+        attempts = attempts.split()
+
     assert len(attempts) % 2 == 0, 'Every attempt must be followed by a result string'
     n_attempts = int(len(attempts) // 2)
     for i in range(n_attempts):
@@ -15011,8 +15017,8 @@ def filter_words(allowed_letters, minimum_occurrences):
     return matches
 
 
-def main():
-    attempts = parse_args()
+def get_possible_words(attempts):
+    attempts = uniformize_and_validate_attempts(attempts)
 
     allowed_letters = get_allowed_letters(attempts)
     # print(allowed_letters)
@@ -15021,12 +15027,22 @@ def main():
     # print(minimum_occurrences)
 
     matches = filter_words(allowed_letters, minimum_occurrences)
-    matches = sorted(matches, key=lambda word: wordfreq.word_frequency(word, 'en'), reverse=True)
+    return matches
 
-    if len(matches) > 50:
-        print(f'{len(matches)} matches')
+
+def format_possible_words(words, max_words=50):
+    words = sorted(words, key=lambda word: wordfreq.word_frequency(word, 'en'), reverse=True)
+    if len(words) > max_words:
+        return f'{len(words)} matches'
     else:
-        print(matches)
+        return ', '.join(words)
+
+
+def main():
+    args = parse_args()
+
+    possible_words = get_possible_words(args.attempts)
+    print(format_possible_words(possible_words))
 
 
 if __name__ == '__main__':

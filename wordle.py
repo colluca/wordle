@@ -14893,6 +14893,11 @@ def parse_args():
         nargs='*',
         help='All attempts encoded as e.g. salet byybb ...'
     )
+    parser.add_argument(
+        '--max-words',
+        type=int,
+        help='Maximum number of options to display',
+    )
     args = parser.parse_args()
     return args
 
@@ -15042,7 +15047,7 @@ def main():
     args = parse_args()
 
     possible_words = get_possible_words(args.attempts)
-    print(format_possible_words(possible_words))
+    print(format_possible_words(possible_words, max_words=args.max_words))
 
 
 if __name__ == '__main__':

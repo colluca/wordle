@@ -14885,6 +14885,10 @@ all_letters = [
 ]
 
 
+DEFAULT_MAX_WORDS = 50
+DEBUG_WORD = ''
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -14896,6 +14900,7 @@ def parse_args():
     parser.add_argument(
         '--max-words',
         type=int,
+        default=DEFAULT_MAX_WORDS,
         help='Maximum number of options to display',
     )
     args = parser.parse_args()
@@ -15007,12 +15012,17 @@ def filter_words(allowed_letters, minimum_occurrences):
         # Check that every letter in word is among allowed letters in that position
         for i, letter in enumerate(word):
             if letter not in allowed_letters[i]:
+                if word == DEBUG_WORD:
+                    print(f'Excluding {word}: {letter} not allowed in position {i}')
                 match = 0
                 break
 
         # Check that word contains more than minimum occurrences of every letter
         for letter, min_occurrences in minimum_occurrences.items():
             if word.count(letter) < min_occurrences:
+                if word == DEBUG_WORD:
+                    print(f'Excluding {word}: {letter} appears {word.count(letter)} times' \
+                          f'but should appear at least {min_occurrences} times')
                 match = 0
                 break
 
@@ -15035,9 +15045,9 @@ def get_possible_words(attempts):
     return matches
 
 
-def format_possible_words(words, max_words=50):
+def format_possible_words(words, max_words=DEFAULT_MAX_WORDS):
     words = sorted(words, key=lambda word: wordfreq.word_frequency(word, 'en'), reverse=True)
-    if len(words) > max_words:
+    if len(words) > max_words or len(words) == 0:
         return f'{len(words)} matches'
     else:
         return ', '.join(words)

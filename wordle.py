@@ -14889,7 +14889,7 @@ DEFAULT_MAX_WORDS = 50
 DEBUG_WORD = ''
 
 
-def parse_args():
+def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'attempts',
@@ -14903,7 +14903,7 @@ def parse_args():
         default=DEFAULT_MAX_WORDS,
         help='Maximum number of options to display',
     )
-    args = parser.parse_args()
+    args = parser.parse_args(args)
     return args
 
 
@@ -15053,12 +15053,11 @@ def format_possible_words(words, max_words=DEFAULT_MAX_WORDS):
         return ', '.join(words)
 
 
-def main():
-    args = parse_args()
-
+def main(args=None):
+    args = parse_args(args)
     possible_words = get_possible_words(args.attempts)
-    print(format_possible_words(possible_words, max_words=args.max_words))
+    return format_possible_words(possible_words, max_words=args.max_words)
 
 
 if __name__ == '__main__':
-    main()
+    print(main())

@@ -14921,6 +14921,9 @@ def uniformize_and_validate_attempts(attempts):
         assert len(attempt) == 5, 'Attempt must be a 5-letter word'
         assert len(result) == 5, 'Result must be a 5-letter word'
 
+    # Convert strings to lowercase
+    attempts = [attempt.lower() for attempt in attempts]
+
     return attempts
 
 

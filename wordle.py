@@ -14916,8 +14916,8 @@ def uniformize_and_validate_attempts(attempts):
     n_attempts = int(len(attempts) // 2)
     for i in range(n_attempts):
         attempt, result = attempts[i*2], attempts[i*2+1]
-        assert set(result).issubset({'b', 'g', 'y', '_'}), \
-            'Result string can only contain b (black), g (green) and y (yellow) letters'
+        assert set(result).issubset({'b', 'g', 'y', 'r', '_'}), \
+            'Result string can only contain b (black), g (green), y (yellow) and r (red) letters'
         assert len(attempt) == 5, 'Attempt must be a 5-letter word'
         assert len(result) == 5, 'Result must be a 5-letter word'
 
@@ -14994,6 +14994,9 @@ def get_minimum_occurrences(attempts):
     # Green occurrences sum within and across attempts (green union).
     # Yellow occurrences do not sum across attempts since they may be
     # multiple tries of the same occurrence.
+    # We also allow letters to be "*", i.e. they occur in the word
+    # in some position, could be the current or not. In this sense
+    # they are like yellow letters, without excluding the current position.
     minimum_occurrences = get_known_occurrences(attempts)
     n_attempts = int(len(attempts) // 2)
     for i in range(n_attempts):
